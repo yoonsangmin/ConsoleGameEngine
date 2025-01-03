@@ -1,69 +1,86 @@
+ï»¿#include "PreCompiledHeader.h"
 #include "Engine.h"
 #include <Windows.h>
 #include <iostream>
 
+#include "Level/Level.h"
+
+// ìŠ¤íƒœí‹± ë³€ìˆ˜ ì´ˆê¸°í™”.
+Engine* Engine::instance = nullptr;
+
 Engine::Engine()
-	: quit(false)
+	: quit(false), mainLevel(nullptr)
 {
+	// ì‹±ê¸€í†¤ ê°ì²´ ì„¤ì •.
+	instance = this;
 }
 
 Engine::~Engine()
 {
+    // ë©”ì¼ ë ˆë²¨ ë©”ëª¨ë¦¬ í•´ì œ.
+    if (mainLevel != nullptr)
+    {
+        delete mainLevel;
+    }
 }
 
 void Engine::Run()
 {
-	// ½ÃÀÛ Å¸ÀÓ ½ºÅÆÇÁ ÀúÀå.
+	// ì‹œì‘ íƒ€ì„ ìŠ¤íƒ¬í”„ ì €ì¥.
+	// timeGetTime í•¨ìˆ˜ëŠ” ë°€ë¦¬ì„¸ì»¨ë“œ(1/1000ì´ˆ) ë‹¨ìœ„.
 	//unsigned long currentTime = timeGetTime();
 	//unsigned long previousTime = 0;
 
-	// CPU ½Ã°è »ç¿ë.
+	// CPU ì‹œê³„ ì‚¬ìš©.
+	// ì‹œìŠ¤í…œ ì‹œê³„ -> ê³ í•´ìƒë„ ì¹´ìš´í„°. (10000000).
+	// ë©”ì¸ë³´ë“œì— ì‹œê³„ê°€ ìˆìŒ.
 	LARGE_INTEGER frequency;
 	QueryPerformanceFrequency(&frequency);
 
-	// ½ÃÀÛ ½Ã°£ ¹× ÀÌÀü ½Ã°£À» À§ÇÑ º¯¼ö.
+	//std::cout << "Frequency: " << frequency.QuadPart << "\n";
+
+	// ì‹œì‘ ì‹œê°„ ë° ì´ì „ ì‹œê°„ì„ ìœ„í•œ ë³€ìˆ˜.
 	LARGE_INTEGER time;
 	QueryPerformanceCounter(&time);
-
 	int64_t currentTime = time.QuadPart;
 	int64_t previousTime = 0;
 
-	// ÇÁ·¹ÀÓ Á¦ÇÑ.
-	float targetFrameRate = 60.0f;
+	// í”„ë ˆì„ ì œí•œ.
+	float targetFrameRate = 90.0f;
 
-	// ÇÑ ÇÁ·¹ÀÓ ½Ã°£ °è»ê.
+	// í•œ í”„ë ˆì„ ì‹œê°„ ê³„ì‚°.
 	float targetOneFrameTime = 1.0f / targetFrameRate;
 
 	// Game-Loop.
 	while (true)
 	{
-		// Á¾·á Á¶°Ç.
+		// ì¢…ë£Œ ì¡°ê±´.
 		if (quit)
 		{
 			break;
 		}
 
-		// ÇöÀç ÇÁ·¹ÀÓ ½Ã°£ ÀúÀå.
+		// í˜„ì¬ í”„ë ˆì„ ì‹œê°„ ì €ì¥.
 		// currentTime = timeGetTime();
 		QueryPerformanceCounter(&time);
 		currentTime = time.QuadPart;
 
-		// ÇÁ·¹ÀÓ ½Ã°£ °è»ê.
+		// í”„ë ˆì„ ì‹œê°„ ê³„ì‚°.
 		float deltaTime = static_cast<float>(currentTime - previousTime) / static_cast<float>(frequency.QuadPart);
 
-		// ÇÁ·¹ÀÓ È®ÀÎ.
+		// í”„ë ˆì„ í™•ì¸.
 		if (deltaTime >= targetOneFrameTime)
 		{
-			// ÀÔ·Â Ã³¸® (ÇöÀç Å°ÀÇ ´­¸² »óÅÂ È®ÀÎ).
+			// ì…ë ¥ ì²˜ë¦¬ (í˜„ì¬ í‚¤ì˜ ëˆŒë¦¼ ìƒíƒœ í™•ì¸).
 			ProcessInput();
 
 			Update(deltaTime);
 			Draw();
 
-			// Å° »óÅÂ ÀúÀå.
+			// í‚¤ ìƒíƒœ ì €ì¥.
 			SavePreviousKeyState();
 
-			// ÀÌÀü ÇÁ·¹ÀÓ ½Ã°£ ÀúÀå.
+			// ì´ì „ í”„ë ˆì„ ì‹œê°„ ì €ì¥.
 			previousTime = currentTime;
 		}
 
@@ -71,9 +88,17 @@ void Engine::Run()
 		//Update(deltaTime);
 		//Draw();
 
-		//// ÀÌÀü ÇÁ·¹ÀÓ ½Ã°£ ÀúÀå.
+		//// ì´ì „ í”„ë ˆì„ ì‹œê°„ ì €ì¥.
 		//previousTime = currentTime;
 	}
+}
+
+void Engine::LoadLevel(Level* newLevel)
+{
+    // ê¸°ì¡´ ë ˆë²¨ì´ ìˆë‹¤ë©´ ì‚­ì œ í›„ êµì²´.
+
+    // ë©”ì¸ ë ˆë²¨ ì„¤ì •.
+    mainLevel = newLevel;
 }
 
 bool Engine::GetKey(int key)
@@ -93,8 +118,14 @@ bool Engine::GetKeyUp(int key)
 
 void Engine::QuitGame()
 {
-	// Á¾·á ÇÃ·¡±× ¼³Á¤.
+	// ì¢…ë£Œ í”Œë˜ê·¸ ì„¤ì •.
 	quit = true;
+}
+
+Engine& Engine::Get()
+{
+	// ì‹±ê¸€í†¤ ê°ì²´ ë°˜í™˜
+	return *instance;
 }
 
 void Engine::ProcessInput()
@@ -107,17 +138,27 @@ void Engine::ProcessInput()
 
 void Engine::Update(float deltaTime)
 {
-	// ESCÅ°·Î °ÔÀÓ Á¾·á.
-	if (GetKeyDown(VK_ESCAPE))
-	{
-		QuitGame();
-	}
+	// ESCí‚¤ë¡œ ê²Œì„ ì¢…ë£Œ.
+	//if (GetKeyDown(VK_ESCAPE))
+	//{
+	//	QuitGame();
+	//}
 
-	std::cout << "DeltaTime: " << deltaTime << ", FPS: " << (1.0f / deltaTime) << "\n";
+    // ë ˆë²¨ ì—…ë°ì´íŠ¸.
+    if (mainLevel != nullptr)
+    {
+        mainLevel->Update(deltaTime);
+    }
+    
+	// std::cout << "DeltaTime: " << deltaTime << ", FPS: " << (1.0f / deltaTime) << "\n";
 }
 
 void Engine::Draw()
 {
+    if (mainLevel != nullptr)
+    {
+        mainLevel->Draw();
+    }
 }
 
 void Engine::SavePreviousKeyState()
