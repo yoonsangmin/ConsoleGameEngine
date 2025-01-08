@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+// @refactor: 경고를 일부러 무시시켰기 때문에 문제가 된다면 고쳐야 함.
+#pragma warning (disable : 4172)
+
 #include <iostream>
 
 #define _CRTDBG_MAP_ALLOC
@@ -22,7 +25,7 @@ template<typename... T>
 void Log(const char* format, T&&... args)
 {
     char buffer[1024];
-    snprintf(buffer, 1024, format, args);
+    snprintf(buffer, 1024, format, args...);
     std::cout << buffer << "\n";
 }
 
