@@ -26,7 +26,7 @@ void Log(const char* format, T&&... args)
 {
     char buffer[1024];
     snprintf(buffer, 1024, format, args...);
-    std::cout << buffer << "\n";
+    std::cout << buffer;
 }
 
 // 디버깅 용도.
