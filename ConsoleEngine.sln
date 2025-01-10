@@ -6,6 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{E164D8CB-147D-4852-933C-E44B6EBA53D8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo", "Demo\Demo.vcxproj", "{C9290649-5767-47D6-883F-195F870F249C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E164D8CB-147D-4852-933C-E44B6EBA53D8} = {E164D8CB-147D-4852-933C-E44B6EBA53D8}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextScrollDemo", "TextScrollDemo\TextScrollDemo.vcxproj", "{C8134F6E-DE49-4855-8E80-2D9A32BBC670}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E164D8CB-147D-4852-933C-E44B6EBA53D8} = {E164D8CB-147D-4852-933C-E44B6EBA53D8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +39,14 @@ Global
 		{C9290649-5767-47D6-883F-195F870F249C}.Release|x64.Build.0 = Release|x64
 		{C9290649-5767-47D6-883F-195F870F249C}.Release|x86.ActiveCfg = Release|Win32
 		{C9290649-5767-47D6-883F-195F870F249C}.Release|x86.Build.0 = Release|Win32
+		{C8134F6E-DE49-4855-8E80-2D9A32BBC670}.Debug|x64.ActiveCfg = Debug|x64
+		{C8134F6E-DE49-4855-8E80-2D9A32BBC670}.Debug|x64.Build.0 = Debug|x64
+		{C8134F6E-DE49-4855-8E80-2D9A32BBC670}.Debug|x86.ActiveCfg = Debug|Win32
+		{C8134F6E-DE49-4855-8E80-2D9A32BBC670}.Debug|x86.Build.0 = Debug|Win32
+		{C8134F6E-DE49-4855-8E80-2D9A32BBC670}.Release|x64.ActiveCfg = Release|x64
+		{C8134F6E-DE49-4855-8E80-2D9A32BBC670}.Release|x64.Build.0 = Release|x64
+		{C8134F6E-DE49-4855-8E80-2D9A32BBC670}.Release|x86.ActiveCfg = Release|Win32
+		{C8134F6E-DE49-4855-8E80-2D9A32BBC670}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

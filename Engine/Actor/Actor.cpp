@@ -2,7 +2,7 @@
 #include "Actor.h"
 
 Actor::Actor()
-	: isActive(true), isExpired(true)
+	: isActive(true), isExpired(false)
 {
 }
 
